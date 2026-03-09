@@ -1,0 +1,267 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "instructions": {
+      "type": "string"
+    },
+    "requestHeadersProxyEnabled": {
+      "type": "boolean"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "gitProvider": {
+      "type": "string"
+    },
+    "gitRepoFullName": {
+      "type": "string"
+    },
+    "providers": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "apiType": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "visibilityType": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "baseURL": {
+            "type": "string"
+          },
+          "documentURL": {
+            "type": "string"
+          },
+          "iconURL": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "oauth2Config": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "properties": {
+              "authURL": {
+                "type": "string"
+              },
+              "tokenURL": {
+                "type": "string"
+              },
+              "clientID": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "authURL",
+              "tokenURL",
+              "clientID",
+              "clientSecret"
+            ],
+            "additionalProperties": false
+          },
+          "tools": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255
+                },
+                "path": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "pathArgsJSONSchema": true,
+                "queryArgsJSONSchema": true,
+                "reqBodyJSONSchema": true,
+                "headers": true,
+                "oauth2Scopes": {
+                  "type": [
+                    "null",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "interceptors": {
+                  "type": [
+                    "null",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "purpose": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
+                      },
+                      "engine": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
+                      },
+                      "ioType": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "purpose",
+                      "engine",
+                      "ioType",
+                      "name",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "method",
+                "path",
+                "name",
+                "title",
+                "description",
+                "interceptors"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "resources": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "annotations": true
+              },
+              "required": [
+                "name",
+                "description",
+                "uri",
+                "mimeType",
+                "size"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "prompts": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "arguments": true,
+                "messages": true
+              },
+              "required": [
+                "name",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "apiType",
+          "visibilityType",
+          "baseURL",
+          "documentURL",
+          "iconURL",
+          "name",
+          "description",
+          "tools",
+          "resources",
+          "prompts"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "$id": "https://hasmcp.com/schemas/mcp-server.json",
+  "title": "HasMCP - MCP Server Import Export Schema",
+  "description": "Canonical JSON schema for validating a complete HasMCP MCP Server tree.",
+  "required": [
+    "name",
+    "description",
+    "instructions",
+    "requestHeadersProxyEnabled",
+    "version",
+    "gitProvider",
+    "gitRepoFullName",
+    "providers"
+  ],
+  "additionalProperties": false
+}

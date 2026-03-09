@@ -1,0 +1,41 @@
+{
+  "name": "readEmailSnippet",
+  "title": "Read Email Snippet",
+  "description": "Read initial part of the email content along with email headers.",
+  "method": 1,
+  "path": "/users/me/messages/{messageId}",
+  "pathArgsJSONSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "messageId": {
+        "type": "string",
+        "description": "message id"
+      }
+    },
+    "required": [
+      "messageId"
+    ]
+  },
+  "queryArgsJSONSchema": null,
+  "reqBodyJSONSchema": null,
+  "headers": [
+    {
+      "Key": "Authorization",
+      "Value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+    }
+  ],
+  "oauth2Scopes": "https://www.googleapis.com/auth/gmail.readonly",
+  "interceptors": [
+    {
+      "purpose": 1,
+      "engine": 1,
+      "ioType": 2,
+      "name": "getSnippetOnlyWithHeaders",
+      "code": "{\n snippet: snippet,\n subject: payload.headers[?name=='Subject'].value | [0],\n from: payload.headers[?name=='From'].value | [0],\n to: payload.headers[?name=='To'].value | [0],\n cc: payload.headers[?name=='Cc'].value | [0] || '',\n date: payload.headers[?name=='Date'].value | [0],\n threadId: threadId\n}"
+    }
+  ],
+  "requiredVariables": [
+    "GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN"
+  ]
+}

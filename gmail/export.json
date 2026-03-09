@@ -1,0 +1,110 @@
+{
+  "name": "gmail",
+  "description": "",
+  "instructions": "# Gmail MCP Server\n\n## Search emails\n\nYou can use standard Gmail search operators to refine your results. You can combine multiple filters by adding space after the filter applied. \n* `from:amy@example.com`: Find emails sent from a specific person.\n* `subject:dinner`: Find emails with \"dinner\" in the subject line.\n* `after:2024/01/01 before:2024/02/01`: Find emails received in January 2024.\n* `in:sent`: Search only messages in the Sent folder.\n* `is:unread`: Find unread messages.\n* `\"exact phrase\"`: Search for an exact phrase\n\n## Read email content\n\nUse the messageId coming from the search results.\n\n## Send email\n\nSend only the available attributes in your request. Do not forget to set any required attribute. While sending email `from` attribute should be asked to user if not known. At worst case don't send the `from` attribute.",
+  "requestHeadersProxyEnabled": false,
+  "version": 2,
+  "gitProvider": "github",
+  "gitRepoFullName": "hasmcp/gmail-mcp-server",
+  "providers": [
+    {
+      "apiType": 1,
+      "visibilityType": 1,
+      "baseURL": "https://gmail.googleapis.com/gmail/v1",
+      "documentURL": "https://developers.google.com/workspace/gmail/api/guides",
+      "iconURL": "https://lh3.googleusercontent.com/MUQv7nIwSyBjiF4doZ_jaeDVx1oEGqRGCKvs1Y96Fl2WaMrNJWplCctLFQtpn9FBk5xl7Dgn7khgJqP_q9cI=w92-h92",
+      "name": "gmail",
+      "description": "Gmail provider is using Gmail API to search, read and send emails using Gmail API. \n\nTo use this provider, please obtain OAuth2 ClientID and Client Secret by following the steps below:\n\n\n1. **Create a Project**:\n    - Go to the https://console.cloud.google.com/.\n    - Create a new project named \"HasMCP Gmail\".\n\n2. **Enable Gmail API**:\n    - Navigate to **APIs \u0026 Services \u003e Library**.\n    - Search for \"Gmail API\" and click **Enable**.\n\n3. **Configure Consent Screen**:\n    - Go to **APIs \u0026 Services \u003e OAuth consent screen**.\n    - Select **External** (unless using a Workspace org) and click **Create**.\n    - Enter an App Name (e.g., \"HasMCP\") and Support Email.\n    - **Important**: Add the following **Scopes**:\n      - `https://www.googleapis.com/auth/gmail.readonly`\n      - `https://www.googleapis.com/auth/gmail.compose`\n    - Add your own email address as a **Test User**.\n\n4. **Create Credentials**:\n    - Go to **APIs \u0026 Services \u003e Credentials**.\n    - Click **Create Credentials \u003e OAuth client ID**.\n    - Select **Web application**.\n    - **Authorized Redirect URIs**: Enter `https://app.hasmcp.com/oauth2/callback` (Confirm this URI in your HasMCP Provider settings).\n    - Click **Create**.\n    - **Copy the Client ID and Client Secret**.\n\nMore details are available in: https://docs.hasmcp.com/tutorials/gmail-mcp-server",
+      "oauth2Config": {
+        "authURL": "https://accounts.google.com/o/oauth2/auth",
+        "tokenURL": "https://oauth2.googleapis.com/token",
+        "clientID": "YOUR_OAUTH_CLIENT_ID",
+        "clientSecret": "YOUR_OAUTH_CLIENT_SECRET"
+      },
+      "tools": [
+        {
+          "method": 3,
+          "path": "/users/me/messages/send",
+          "name": "sendEmail",
+          "title": "Send Email",
+          "description": "Send new email or reply to thread",
+          "pathArgsJSONSchema": "ImJuVnNiQT09Ig==",
+          "queryArgsJSONSchema": "ImJuVnNiQT09Ig==",
+          "reqBodyJSONSchema": "ImV5SWtjMk5vWlcxaElqb2lhSFIwY0RvdkwycHpiMjR0YzJOb1pXMWhMbTl5Wnk5a2NtRm1kQzB3Tnk5elkyaGxiV0VqSWl3aWRHbDBiR1VpT2lKRmJXRnBiQ0JUWTJobGJXRWlMQ0owZVhCbElqb2liMkpxWldOMElpd2ljSEp2Y0dWeWRHbGxjeUk2ZXlKbWNtOXRJanA3SW5SNWNHVWlPaUp6ZEhKcGJtY2lMQ0prWlhOamNtbHdkR2x2YmlJNklsTmxibVJsY2lCbGJXRnBiQ0JoWkdSeVpYTnpJQ2hsTG1jdUlITmxibVJsY2tCbGVHRnRjR3hsTG1OdmJTa2lMQ0ptYjNKdFlYUWlPaUpsYldGcGJDSjlMQ0owYnlJNmV5SjBlWEJsSWpvaVlYSnlZWGtpTENKcGRHVnRjeUk2ZXlKMGVYQmxJam9pYzNSeWFXNW5JaXdpWm05eWJXRjBJam9pWlcxaGFXd2lmU3dpWkdWelkzSnBjSFJwYjI0aU9pSk1hWE4wSUc5bUlISmxZMmx3YVdWdWRDQmxiV0ZwYkNCaFpHUnlaWE56WlhNaWZTd2ljM1ZpYW1WamRDSTZleUowZVhCbElqb2ljM1J5YVc1bklpd2laR1Z6WTNKcGNIUnBiMjRpT2lKRmJXRnBiQ0J6ZFdKcVpXTjBJbjBzSW1KdlpIa2lPbnNpZEhsd1pTSTZJbk4wY21sdVp5SXNJbVJsYzJOeWFYQjBhVzl1SWpvaVJXMWhhV3dnWW05a2VTQmpiMjUwWlc1MElDaDFjMlZrSUdadmNpQjBaWGgwTDNCc1lXbHVJRzl5SUhkb1pXNGdhSFJ0YkVKdlpIa2dibTkwSUhCeWIzWnBaR1ZrS1NKOUxDSm9kRzFzUW05a2VTSTZleUowZVhCbElqb2ljM1J5YVc1bklpd2laR1Z6WTNKcGNIUnBiMjRpT2lKSVZFMU1JSFpsY25OcGIyNGdiMllnZEdobElHVnRZV2xzSUdKdlpIa2lmU3dpYldsdFpWUjVjR1VpT25zaWRIbHdaU0k2SW5OMGNtbHVaeUlzSW1WdWRXMGlPbHNpZEdWNGRDOXdiR0ZwYmlJc0luUmxlSFF2YUhSdGJDSXNJbTExYkhScGNHRnlkQzloYkhSbGNtNWhkR2wyWlNKZExDSmtaV1poZFd4MElqb2lkR1Y0ZEM5d2JHRnBiaUlzSW1SbGMyTnlhWEIwYVc5dUlqb2lSVzFoYVd3Z1kyOXVkR1Z1ZENCMGVYQmxJbjBzSW1OaklqcDdJblI1Y0dVaU9pSmhjbkpoZVNJc0ltbDBaVzF6SWpwN0luUjVjR1VpT2lKemRISnBibWNpTENKbWIzSnRZWFFpT2lKbGJXRnBiQ0o5TENKa1pYTmpjbWx3ZEdsdmJpSTZJa3hwYzNRZ2IyWWdRME1nY21WamFYQnBaVzUwY3lKOUxDSmlZMk1pT25zaWRIbHdaU0k2SW1GeWNtRjVJaXdpYVhSbGJYTWlPbnNpZEhsd1pTSTZJbk4wY21sdVp5SXNJbVp2Y20xaGRDSTZJbVZ0WVdsc0luMHNJbVJsYzJOeWFYQjBhVzl1SWpvaVRHbHpkQ0J2WmlCQ1EwTWdjbVZqYVhCcFpXNTBjeUo5TENKMGFISmxZV1JKWkNJNmV5SjBlWEJsSWpvaWMzUnlhVzVuSWl3aVpHVnpZM0pwY0hScGIyNGlPaUpVYUhKbFlXUWdTVVFnZEc4Z2NtVndiSGtnZEc4aWZTd2lhVzVTWlhCc2VWUnZJanA3SW5SNWNHVWlPaUp6ZEhKcGJtY2lMQ0prWlhOamNtbHdkR2x2YmlJNklrMWxjM05oWjJVZ1NVUWdZbVZwYm1jZ2NtVndiR2xsWkNCMGJ5SjlmU3dpY21WeGRXbHlaV1FpT2xzaVpuSnZiU0lzSW5Sdklpd2ljM1ZpYW1WamRDSXNJbUp2WkhraVhYMD0i",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "oauth2Scopes": [
+            "https://www.googleapis.com/auth/gmail.compose"
+          ],
+          "interceptors": [
+            {
+              "purpose": 1,
+              "engine": 2,
+              "ioType": 1,
+              "name": "gmailSendEmailMapper",
+              "code": "// --- Helper Functions ---\n\n// Standard Base64 Encode\nfunction btoa(input) {\n    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';\n    var str = String(input);\n    var output = '';\n\n    for (var block, charCode, idx = 0, map = chars;\n         str.charAt(idx | 0) || (map = '=', idx % 1);\n         output += map.charAt(63 \u0026 block \u003e\u003e 8 - idx % 1 * 8)) {\n        \n        charCode = str.charCodeAt(idx += 3 / 4);\n        if (charCode \u003e 0xFF) {\n            throw new Error(\"'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.\");\n        }\n        block = block \u003c\u003c 8 | charCode;\n    }\n    return output;\n}\n\n// RFC 2047 Encoder (for Headers like Subject)\nfunction encodeHeader(text) {\n    if (!text) return \"\";\n    // Only encode if contains non-ASCII\n    if (/[^\\x00-\\x7F]/.test(text)) {\n        var encoded = btoa(unescape(encodeURIComponent(text)));\n        return '=?UTF-8?B?' + encoded + '?=';\n    }\n    return text;\n}\n\n// --- Main Logic ---\n\nvar nl = \"\\r\\n\";\nvar boundary = \"===============\" + Date.now() + \"==\";\nvar headers = [];\n\n// 1. Mandatory Date\nheaders.push(\"Date: \" + new Date().toUTCString());\n\n// 2. Mandatory From (Use input or default)\nif (input.from) {\n    headers.push(\"From: \" + input.from);\n}\n\n// 3. To/Cc/Bcc\nif (input.to \u0026\u0026 input.to.length \u003e 0) headers.push(\"To: \" + input.to.join(\", \"));\nif (input.cc \u0026\u0026 input.cc.length \u003e 0) headers.push(\"Cc: \" + input.cc.join(\", \"));\nif (input.bcc \u0026\u0026 input.bcc.length \u003e 0) headers.push(\"Bcc: \" + input.bcc.join(\", \"));\n\n// 4. Subject (Encoded)\nheaders.push(\"Subject: \" + encodeHeader(input.subject || \"\"));\n\n// 5. Threading (In-Reply-To / References)\nif (input.inReplyTo) {\n    var replyId = input.inReplyTo;\n    // Ensure it is wrapped in \u003c...\u003e\n    if (replyId.charAt(0) !== '\u003c') {\n        replyId = '\u003c' + replyId + '@mail.gmail.com\u003e';\n    }\n    headers.push(\"In-Reply-To: \" + replyId);\n    headers.push(\"References: \" + replyId);\n}\n\nheaders.push(\"MIME-Version: 1.0\");\n\n// --- Construct Body ---\nvar bodyContent = \"\";\n\nif (input.htmlBody \u0026\u0026 input.body) {\n    // Multipart/Alternative\n    headers.push('Content-Type: multipart/alternative; boundary=\"' + boundary + '\"');\n\n    bodyContent += \"--\" + boundary + nl;\n    bodyContent += 'Content-Type: text/plain; charset=\"UTF-8\"' + nl;\n    bodyContent += 'Content-Transfer-Encoding: 7bit' + nl + nl;\n    bodyContent += input.body + nl + nl;\n\n    bodyContent += \"--\" + boundary + nl;\n    bodyContent += 'Content-Type: text/html; charset=\"UTF-8\"' + nl;\n    bodyContent += 'Content-Transfer-Encoding: 7bit' + nl + nl;\n    bodyContent += input.htmlBody + nl + nl;\n\n    bodyContent += \"--\" + boundary + \"--\";\n\n} else if (input.htmlBody) {\n    // HTML Only\n    headers.push('Content-Type: text/html; charset=\"UTF-8\"');\n    headers.push('Content-Transfer-Encoding: 7bit');\n    bodyContent = input.htmlBody;\n\n} else {\n    // Plain Text Only\n    headers.push('Content-Type: text/plain; charset=\"UTF-8\"');\n    headers.push('Content-Transfer-Encoding: 7bit');\n    bodyContent = input.body || \"\";\n}\n\nvar fullMessage = headers.join(nl) + nl + nl + bodyContent;\n\n// --- Encode to Base64URL ---\n// 1. Encode to Base64 (handling UTF-8)\nvar encoded = btoa(unescape(encodeURIComponent(fullMessage)));\n\n// 2. Make URL-Safe (Replace +/, remove =)\nvar raw = encoded.replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n\n// --- Output ---\nvar result = {\n    \"raw\": raw\n};\n\nif (input.threadId) {\n    result.threadId = input.threadId;\n}\n\nresult"
+            }
+          ]
+        },
+        {
+          "method": 1,
+          "path": "/users/me/messages",
+          "name": "searchEmails",
+          "title": "Search Emails",
+          "description": "Search for emails. Use 'q' for query (e.g. 'from:alice')",
+          "pathArgsJSONSchema": "ImJuVnNiQT09Ig==",
+          "queryArgsJSONSchema": "ImV5SjBlWEJsSWpvaWIySnFaV04wSWl3aWNISnZjR1Z5ZEdsbGN5STZleUp4SWpwN0ltUmxjMk55YVhCMGFXOXVJam9pVkdobElITmxZWEpqYUNCeGRXVnllU0J6ZEhKcGJtY3VJQ2hsTG1jdUxDQW5abkp2YlRwaGJHbGpaU2NwSWl3aWRIbHdaU0k2SW5OMGNtbHVaeUo5TENKdFlYaFNaWE4xYkhSeklqcDdJbVJsYzJOeWFYQjBhVzl1SWpvaVRXRjRhVzExYlNCdWRXMWlaWElnYjJZZ2JXVnpjMkZuWlhNZ2RHOGdjbVYwZFhKdUxpQlVhR2x6SUdacFpXeGtJR1JsWm1GMWJIUnpJSFJ2SURFd01DNGdWR2hsSUcxaGVHbHRkVzBnWVd4c2IzZGxaQ0IyWVd4MVpTQm1iM0lnZEdocGN5Qm1hV1ZzWkNCcGN5QTFNREF1SUZKbFkyOXRiV1Z1WkdWa0lIWmhiSFZsSUdseklERXdMaUlzSW5SNWNHVWlPaUp1ZFcxaVpYSWlmWDBzSW5KbGNYVnBjbVZrSWpwYkluRWlYWDA9Ig==",
+          "reqBodyJSONSchema": "ImJuVnNiQT09Ig==",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+            }
+          ],
+          "oauth2Scopes": [
+            "https://www.googleapis.com/auth/gmail.readonly"
+          ],
+          "interceptors": null
+        },
+        {
+          "method": 1,
+          "path": "/users/me/messages/{messageId}",
+          "name": "readEmailSnippet",
+          "title": "Read Email Snippet",
+          "description": "Read initial part of the email content along with email headers.",
+          "pathArgsJSONSchema": "ImV5SWtjMk5vWlcxaElqb2lhSFIwY0RvdkwycHpiMjR0YzJOb1pXMWhMbTl5Wnk5a2NtRm1kQzB3Tnk5elkyaGxiV0VqSWl3aWRIbHdaU0k2SW05aWFtVmpkQ0lzSW5CeWIzQmxjblJwWlhNaU9uc2liV1Z6YzJGblpVbGtJanA3SW5SNWNHVWlPaUp6ZEhKcGJtY2lMQ0prWlhOamNtbHdkR2x2YmlJNkltMWxjM05oWjJVZ2FXUWlmWDBzSW5KbGNYVnBjbVZrSWpwYkltMWxjM05oWjJWSlpDSmRmUT09Ig==",
+          "queryArgsJSONSchema": "ImJuVnNiQT09Ig==",
+          "reqBodyJSONSchema": "ImJuVnNiQT09Ig==",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+            }
+          ],
+          "oauth2Scopes": [
+            "https://www.googleapis.com/auth/gmail.readonly"
+          ],
+          "interceptors": [
+            {
+              "purpose": 1,
+              "engine": 1,
+              "ioType": 2,
+              "name": "getSnippetOnlyWithHeaders",
+              "code": "{\n snippet: snippet,\n subject: payload.headers[?name=='Subject'].value | [0],\n from: payload.headers[?name=='From'].value | [0],\n to: payload.headers[?name=='To'].value | [0],\n cc: payload.headers[?name=='Cc'].value | [0] || '',\n date: payload.headers[?name=='Date'].value | [0],\n threadId: threadId\n}"
+            }
+          ]
+        }
+      ],
+      "resources": [],
+      "prompts": []
+    }
+  ]
+}

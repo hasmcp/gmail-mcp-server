@@ -1,0 +1,104 @@
+{
+  "name": "sendEmail",
+  "title": "Send Email",
+  "description": "Send new email or reply to thread",
+  "method": 3,
+  "path": "/users/me/messages/send",
+  "pathArgsJSONSchema": null,
+  "queryArgsJSONSchema": null,
+  "reqBodyJSONSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Email Schema",
+    "type": "object",
+    "properties": {
+      "from": {
+        "type": "string",
+        "description": "Sender email address (e.g. sender@example.com)",
+        "format": "email"
+      },
+      "to": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "email"
+        },
+        "description": "List of recipient email addresses"
+      },
+      "subject": {
+        "type": "string",
+        "description": "Email subject"
+      },
+      "body": {
+        "type": "string",
+        "description": "Email body content (used for text/plain or when htmlBody not provided)"
+      },
+      "htmlBody": {
+        "type": "string",
+        "description": "HTML version of the email body"
+      },
+      "mimeType": {
+        "type": "string",
+        "enum": [
+          "text/plain",
+          "text/html",
+          "multipart/alternative"
+        ],
+        "default": "text/plain",
+        "description": "Email content type"
+      },
+      "cc": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "email"
+        },
+        "description": "List of CC recipients"
+      },
+      "bcc": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "email"
+        },
+        "description": "List of BCC recipients"
+      },
+      "threadId": {
+        "type": "string",
+        "description": "Thread ID to reply to"
+      },
+      "inReplyTo": {
+        "type": "string",
+        "description": "Message ID being replied to"
+      }
+    },
+    "required": [
+      "from",
+      "to",
+      "subject",
+      "body"
+    ]
+  },
+  "headers": [
+    {
+      "Key": "Authorization",
+      "Value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+    },
+    {
+      "Key": "Content-Type",
+      "Value": "application/json"
+    }
+  ],
+  "oauth2Scopes": "https://www.googleapis.com/auth/gmail.compose",
+  "interceptors": [
+    {
+      "purpose": 1,
+      "engine": 2,
+      "ioType": 1,
+      "name": "gmailSendEmailMapper",
+      "code": "// --- Helper Functions ---\n\n// Standard Base64 Encode\nfunction btoa(input) {\n    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';\n    var str = String(input);\n    var output = '';\n\n    for (var block, charCode, idx = 0, map = chars;\n         str.charAt(idx | 0) || (map = '=', idx % 1);\n         output += map.charAt(63 \u0026 block \u003e\u003e 8 - idx % 1 * 8)) {\n        \n        charCode = str.charCodeAt(idx += 3 / 4);\n        if (charCode \u003e 0xFF) {\n            throw new Error(\"'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.\");\n        }\n        block = block \u003c\u003c 8 | charCode;\n    }\n    return output;\n}\n\n// RFC 2047 Encoder (for Headers like Subject)\nfunction encodeHeader(text) {\n    if (!text) return \"\";\n    // Only encode if contains non-ASCII\n    if (/[^\\x00-\\x7F]/.test(text)) {\n        var encoded = btoa(unescape(encodeURIComponent(text)));\n        return '=?UTF-8?B?' + encoded + '?=';\n    }\n    return text;\n}\n\n// --- Main Logic ---\n\nvar nl = \"\\r\\n\";\nvar boundary = \"===============\" + Date.now() + \"==\";\nvar headers = [];\n\n// 1. Mandatory Date\nheaders.push(\"Date: \" + new Date().toUTCString());\n\n// 2. Mandatory From (Use input or default)\nif (input.from) {\n    headers.push(\"From: \" + input.from);\n}\n\n// 3. To/Cc/Bcc\nif (input.to \u0026\u0026 input.to.length \u003e 0) headers.push(\"To: \" + input.to.join(\", \"));\nif (input.cc \u0026\u0026 input.cc.length \u003e 0) headers.push(\"Cc: \" + input.cc.join(\", \"));\nif (input.bcc \u0026\u0026 input.bcc.length \u003e 0) headers.push(\"Bcc: \" + input.bcc.join(\", \"));\n\n// 4. Subject (Encoded)\nheaders.push(\"Subject: \" + encodeHeader(input.subject || \"\"));\n\n// 5. Threading (In-Reply-To / References)\nif (input.inReplyTo) {\n    var replyId = input.inReplyTo;\n    // Ensure it is wrapped in \u003c...\u003e\n    if (replyId.charAt(0) !== '\u003c') {\n        replyId = '\u003c' + replyId + '@mail.gmail.com\u003e';\n    }\n    headers.push(\"In-Reply-To: \" + replyId);\n    headers.push(\"References: \" + replyId);\n}\n\nheaders.push(\"MIME-Version: 1.0\");\n\n// --- Construct Body ---\nvar bodyContent = \"\";\n\nif (input.htmlBody \u0026\u0026 input.body) {\n    // Multipart/Alternative\n    headers.push('Content-Type: multipart/alternative; boundary=\"' + boundary + '\"');\n\n    bodyContent += \"--\" + boundary + nl;\n    bodyContent += 'Content-Type: text/plain; charset=\"UTF-8\"' + nl;\n    bodyContent += 'Content-Transfer-Encoding: 7bit' + nl + nl;\n    bodyContent += input.body + nl + nl;\n\n    bodyContent += \"--\" + boundary + nl;\n    bodyContent += 'Content-Type: text/html; charset=\"UTF-8\"' + nl;\n    bodyContent += 'Content-Transfer-Encoding: 7bit' + nl + nl;\n    bodyContent += input.htmlBody + nl + nl;\n\n    bodyContent += \"--\" + boundary + \"--\";\n\n} else if (input.htmlBody) {\n    // HTML Only\n    headers.push('Content-Type: text/html; charset=\"UTF-8\"');\n    headers.push('Content-Transfer-Encoding: 7bit');\n    bodyContent = input.htmlBody;\n\n} else {\n    // Plain Text Only\n    headers.push('Content-Type: text/plain; charset=\"UTF-8\"');\n    headers.push('Content-Transfer-Encoding: 7bit');\n    bodyContent = input.body || \"\";\n}\n\nvar fullMessage = headers.join(nl) + nl + nl + bodyContent;\n\n// --- Encode to Base64URL ---\n// 1. Encode to Base64 (handling UTF-8)\nvar encoded = btoa(unescape(encodeURIComponent(fullMessage)));\n\n// 2. Make URL-Safe (Replace +/, remove =)\nvar raw = encoded.replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n\n// --- Output ---\nvar result = {\n    \"raw\": raw\n};\n\nif (input.threadId) {\n    result.threadId = input.threadId;\n}\n\nresult"
+    }
+  ],
+  "requiredVariables": [
+    "GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN"
+  ]
+}

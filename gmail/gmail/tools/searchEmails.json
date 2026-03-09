@@ -1,0 +1,35 @@
+{
+  "name": "searchEmails",
+  "title": "Search Emails",
+  "description": "Search for emails. Use 'q' for query (e.g. 'from:alice')",
+  "method": 1,
+  "path": "/users/me/messages",
+  "pathArgsJSONSchema": null,
+  "queryArgsJSONSchema": {
+    "type": "object",
+    "properties": {
+      "q": {
+        "description": "The search query string. (e.g., 'from:alice')",
+        "type": "string"
+      },
+      "maxResults": {
+        "description": "Maximum number of messages to return. This field defaults to 100. The maximum allowed value for this field is 500. Recommended value is 10.",
+        "type": "number"
+      }
+    },
+    "required": [
+      "q"
+    ]
+  },
+  "reqBodyJSONSchema": null,
+  "headers": [
+    {
+      "Key": "Authorization",
+      "Value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+    }
+  ],
+  "oauth2Scopes": "https://www.googleapis.com/auth/gmail.readonly",
+  "requiredVariables": [
+    "GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN"
+  ]
+}
