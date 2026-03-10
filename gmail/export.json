@@ -3,7 +3,7 @@
   "description": "",
   "instructions": "# Gmail MCP Server\n\n## Search emails\n\nYou can use standard Gmail search operators to refine your results. You can combine multiple filters by adding space after the filter applied. \n* `from:amy@example.com`: Find emails sent from a specific person.\n* `subject:dinner`: Find emails with \"dinner\" in the subject line.\n* `after:2024/01/01 before:2024/02/01`: Find emails received in January 2024.\n* `in:sent`: Search only messages in the Sent folder.\n* `is:unread`: Find unread messages.\n* `\"exact phrase\"`: Search for an exact phrase\n\n## Read email content\n\nUse the messageId coming from the search results.\n\n## Send email\n\nSend only the available attributes in your request. Do not forget to set any required attribute. While sending email `from` attribute should be asked to user if not known. At worst case don't send the `from` attribute.",
   "requestHeadersProxyEnabled": false,
-  "version": 2,
+  "version": 3,
   "gitProvider": "github",
   "gitRepoFullName": "hasmcp/gmail-mcp-server",
   "providers": [
@@ -12,7 +12,7 @@
       "visibilityType": 1,
       "baseURL": "https://gmail.googleapis.com/gmail/v1",
       "documentURL": "https://developers.google.com/workspace/gmail/api/guides",
-      "iconURL": "https://lh3.googleusercontent.com/MUQv7nIwSyBjiF4doZ_jaeDVx1oEGqRGCKvs1Y96Fl2WaMrNJWplCctLFQtpn9FBk5xl7Dgn7khgJqP_q9cI=w92-h92",
+      "iconURL": "https://icons.hasmcp.com/icons/providers/07sEzu5vNnu/icon.png",
       "name": "gmail",
       "description": "Gmail provider is using Gmail API to search, read and send emails using Gmail API. \n\nTo use this provider, please obtain OAuth2 ClientID and Client Secret by following the steps below:\n\n\n1. **Create a Project**:\n    - Go to the https://console.cloud.google.com/.\n    - Create a new project named \"HasMCP Gmail\".\n\n2. **Enable Gmail API**:\n    - Navigate to **APIs \u0026 Services \u003e Library**.\n    - Search for \"Gmail API\" and click **Enable**.\n\n3. **Configure Consent Screen**:\n    - Go to **APIs \u0026 Services \u003e OAuth consent screen**.\n    - Select **External** (unless using a Workspace org) and click **Create**.\n    - Enter an App Name (e.g., \"HasMCP\") and Support Email.\n    - **Important**: Add the following **Scopes**:\n      - `https://www.googleapis.com/auth/gmail.readonly`\n      - `https://www.googleapis.com/auth/gmail.compose`\n    - Add your own email address as a **Test User**.\n\n4. **Create Credentials**:\n    - Go to **APIs \u0026 Services \u003e Credentials**.\n    - Click **Create Credentials \u003e OAuth client ID**.\n    - Select **Web application**.\n    - **Authorized Redirect URIs**: Enter `https://app.hasmcp.com/oauth2/callback` (Confirm this URI in your HasMCP Provider settings).\n    - Click **Create**.\n    - **Copy the Client ID and Client Secret**.\n\nMore details are available in: https://docs.hasmcp.com/tutorials/gmail-mcp-server",
       "oauth2Config": {

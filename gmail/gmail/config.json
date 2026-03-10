@@ -4,7 +4,7 @@
   "instructions": "# Gmail MCP Server\n\n## Search emails\n\nYou can use standard Gmail search operators to refine your results. You can combine multiple filters by adding space after the filter applied. \n* `from:amy@example.com`: Find emails sent from a specific person.\n* `subject:dinner`: Find emails with \"dinner\" in the subject line.\n* `after:2024/01/01 before:2024/02/01`: Find emails received in January 2024.\n* `in:sent`: Search only messages in the Sent folder.\n* `is:unread`: Find unread messages.\n* `\"exact phrase\"`: Search for an exact phrase\n\n## Read email content\n\nUse the messageId coming from the search results.\n\n## Send email\n\nSend only the available attributes in your request. Do not forget to set any required attribute. While sending email `from` attribute should be asked to user if not known. At worst case don't send the `from` attribute.",
   "baseURL": "https://gmail.googleapis.com/gmail/v1",
   "documentURL": "https://developers.google.com/workspace/gmail/api/guides",
-  "iconURL": "https://lh3.googleusercontent.com/MUQv7nIwSyBjiF4doZ_jaeDVx1oEGqRGCKvs1Y96Fl2WaMrNJWplCctLFQtpn9FBk5xl7Dgn7khgJqP_q9cI=w92-h92",
+  "iconURL": "https://icons.hasmcp.com/icons/providers/07sEzu5vNnu/icon.png",
   "secretPrefix": "GMAIL_GOOGLEAPIS_COM",
   "verificationStatus": 2,
   "apiType": 1,
