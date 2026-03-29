@@ -56,8 +56,9 @@ To use this provider, please obtain OAuth2 ClientID and Client Secret by followi
 
 More details are available in: https://docs.hasmcp.com/tutorials/gmail-mcp-server
 
-#### Tools (2)
+#### Tools (3)
 
 - [sendEmail](gmail/tools/send-email.md) — Send new email or reply to thread
 - [searchEmails](gmail/tools/search-emails.md) — Search for emails. Use 'q' for query (e.g. 'from:alice')
+- [readEmailSnippet](gmail/tools/read-email-snippet.md) — Read initial part of the email content along with email headers.
 

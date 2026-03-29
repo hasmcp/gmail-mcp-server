@@ -4,7 +4,7 @@
   "instructions": "# Gmail MCP Server\n\n## Search emails\n\nYou can use standard Gmail search operators to refine your results. You can combine multiple filters by adding space after the filter applied. \n* `from:amy@example.com`: Find emails sent from a specific person.\n* `subject:dinner`: Find emails with \"dinner\" in the subject line.\n* `after:2024/01/01 before:2024/02/01`: Find emails received in January 2024.\n* `in:sent`: Search only messages in the Sent folder.\n* `is:unread`: Find unread messages.\n* `\"exact phrase\"`: Search for an exact phrase\n\n## Read email content\n\nUse the messageId coming from the search results.\n\n## Send email\n\nSend only the available attributes in your request. Do not forget to set any required attribute. While sending email `from` attribute should be asked to user if not known. At worst case don't send the `from` attribute.",
   "requestHeadersProxyEnabled": false,
   "dynamicToolDiscoveryEnabled": false,
-  "version": 4,
+  "version": 5,
   "gitProvider": "github",
   "gitRepoFullName": "hasmcp/gmail-mcp-server",
   "providers": [
@@ -80,6 +80,37 @@
             ""
           ],
           "interceptors": null
+        },
+        {
+          "method": 1,
+          "path": "/users/me/messages/{messageId}",
+          "name": "readEmailSnippet",
+          "title": "Read Email Snippet",
+          "description": "Read initial part of the email content along with email headers.",
+          "pathArgsJSONSchema": "ImV5SWtjMk5vWlcxaElqb2lhSFIwY0RvdkwycHpiMjR0YzJOb1pXMWhMbTl5Wnk5a2NtRm1kQzB3Tnk5elkyaGxiV0VqSWl3aWRIbHdaU0k2SW05aWFtVmpkQ0lzSW5CeWIzQmxjblJwWlhNaU9uc2liV1Z6YzJGblpVbGtJanA3SW5SNWNHVWlPaUp6ZEhKcGJtY2lMQ0prWlhOamNtbHdkR2x2YmlJNkltMWxjM05oWjJVZ2FXUWlmWDBzSW5KbGNYVnBjbVZrSWpwYkltMWxjM05oWjJWSlpDSmRmUT09Ig==",
+          "queryArgsJSONSchema": "ImJuVnNiQT09Ig==",
+          "reqBodyJSONSchema": "ImJuVnNiQT09Ig==",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer ${GMAIL_GOOGLEAPIS_COM_ACCESS_TOKEN}"
+            }
+          ],
+          "oauth2Scopes": [
+            "https://www.googleapis.com/auth/gmail.readonly"
+          ],
+          "hints": [
+            ""
+          ],
+          "interceptors": [
+            {
+              "purpose": 1,
+              "engine": 1,
+              "ioType": 2,
+              "name": "getSnippetOnlyWithHeaders",
+              "code": "{\n snippet: snippet,\n subject: payload.headers[?name=='Subject'].value | [0],\n from: payload.headers[?name=='From'].value | [0],\n to: payload.headers[?name=='To'].value | [0],\n cc: payload.headers[?name=='Cc'].value | [0] || '',\n date: payload.headers[?name=='Date'].value | [0],\n threadId: threadId\n}"
+            }
+          ]
         }
       ],
       "resources": [],

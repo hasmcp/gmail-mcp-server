@@ -38,8 +38,9 @@ More details are available in: https://docs.hasmcp.com/tutorials/gmail-mcp-serve
 
 **Documentation:** [https://developers.google.com/workspace/gmail/api/guides](https://developers.google.com/workspace/gmail/api/guides)
 
-## Tools (2)
+## Tools (3)
 
 - [sendEmail](tools/send-email.md) — Send new email or reply to thread
 - [searchEmails](tools/search-emails.md) — Search for emails. Use 'q' for query (e.g. 'from:alice')
+- [readEmailSnippet](tools/read-email-snippet.md) — Read initial part of the email content along with email headers.
 
